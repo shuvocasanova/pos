@@ -82,6 +82,9 @@
 <!-- bootstrap datepicker -->
 <script src="views/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 
+<!-- jquery number -->
+<script src="views/plugins/jqueryNumber/jquerynumber.min.js"></script>
+
   <!--====  End of plugins javascript  ====-->
   
 </head>
@@ -123,6 +126,7 @@
             $_GET["route"] == 'customers' ||
             $_GET["route"] == 'manage-sales' ||
             $_GET["route"] == 'create-sales' ||
+            $_GET["route"] == 'edit-sale' ||
             $_GET["route"] == 'sales-report' ||
             $_GET["route"] == 'logout'){
 

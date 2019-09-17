@@ -1,23 +1,16 @@
-
-
 <?php 
 
-require_once "models/connection.model.php";
-function fill_product($pdo){
-  $output='';
-  $select=$pdo->prepare("SELECT * FROM products ORDER BY name ASC");
-  $select->execute();
+  $item = null;
+  $value = null;
 
-  $result=$select->fetchAll();
+  $customers = ControllerProducts::ctrShowProducts($item, $value);
 
-  foreach ($result as $key => $value) {
-    $output .='<option value"'.$value["code"].'">'.$value["name"].'</option>';
+  foreach ($customers as $key => $value) {
+    $output = '<option value="'.$value["id"].'">'.$value["name"].'</option> ';
   }
-  return $output;
-}
+
 
  ?>
-
 
 
 

@@ -12,219 +12,317 @@
 
       <li><a href="home"><i class="fa fa-dashboard"></i> Home</a></li>
 
-      <li class="active">Dashboard</li>
+      <li class="active">Create Sale</li>
 
     </ol>
 
   </section>
 
   <section class="content">
-    <div class="row">
 
+    <div class="row">
       
       <!--=============================================
       THE FORM
       =============================================-->
-      
       <div class="col-lg-5 col-xs-12">
-        <div class="box box-succes">
+        
+        <div class="box box-success">
+
           <div class="box-header with-border"></div>
-          <form role="form" method="post" class="saleform">
-          <div class="box-body">
-            
-              <div class="box">
 
+          <form role="form" method="post" class="saleForm">
 
-                <!--=============================================
-                    seller input
-                  =============================================-->
-                <div class="form-group">
-                  <div class="input-group">
-
-                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                    <input type="text" class="form-control" id="newSeller" name="newSeller" value="Administrator" readonly>
-
-                    
-                  </div>
-                  
-                </div>
-                <!--=============================================
-                    code input
-                  =============================================-->
-                <div class="form-group">
-                  <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-key"></i></span>
-                    <input type="text" class="form-control" id="newCode" name="newCode" value="10003" readonly>
-                    
-                  </div>
-                </div>
+            <div class="box-body">
                 
-                <!--=====================================
+                <div class="box">
+
+                    <!--=====================================
+                    =            SELLER INPUT           =
+                    ======================================-->
+                  
+                    
+                    <div class="form-group">
+
+                      <div class="input-group">
+                        
+                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+
+                        <input type="text" class="form-control"  id="newSeller" value="<?php echo $_SESSION["name"]; ?>" readonly>
+
+                        <input type="hidden" name="idSeller" value="<?php echo $_SESSION["id"]; ?>">
+
+                      </div>
+
+                    </div>
+
+
+                    <!--=====================================
+                    CODE INPUT
+                    ======================================-->
+                  
+                    
+                    <div class="form-group">
+
+                      <div class="input-group">
+                        
+                        <span class="input-group-addon"><i class="fa fa-key"></i></span>
+                        
+
+                        <?php 
+                          $item = null;
+                          $value = null;
+
+                          $sales = ControllerSales::ctrShowSales($item, $value);
+
+                          if(!$sales){
+
+                            echo '<input type="text" class="form-control" name="newSale" id="newSale" value="10001" readonly>';
+                          }
+                          else{
+
+                            foreach ($sales as $key => $value) {
+                              
+                            }
+
+                            $code = $value["code"] +1;
+
+                            echo '<input type="text" class="form-control" name="newSale" id="newSale" value="'.$code.'" readonly>';
+
+                          }
+
+                        ?>
+
+                      </div>
+
+
+                    </div>
+
+
+                    <!--=====================================
                     =            CUSTOMER INPUT           =
                     ======================================-->
-                <div class="form-group">
-                  <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                    <select class="form-control" name="selectCustomer" id="selectCustomer" required>
-                      <option value="">Select Customer</option>
-                    </select>
-
-                    <span class="input-group-addon"><button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#addCustomer" data-dismiss="modal">Add Customer</button></span>
-                    
-                  </div>
                   
-                </div>
+                    
+                    <div class="form-group">
 
-                <!--=====================================
+                      <div class="input-group">
+                        
+                        <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                        <select class="form-control" name="selectCustomer" id="selectCustomer" required>
+                          
+                            <option value="">Select customer</option>
+
+                            <?php 
+
+                            $item = null;
+                            $value = null;
+
+                            $customers = ControllerCustomers::ctrShowCustomers($item, $value);
+
+                            foreach ($customers as $key => $value) {
+                              echo '<option value="'.$value["id"].'">'.$value["name"].'</option>';
+                            }
+
+
+                            ?>
+
+                        </select>
+
+                        <span class="input-group-addon"><button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modalAddCustomer" data-dismiss="modal">Add Customer</button></span>
+
+                      </div>
+
+                    </div>
+
+                    <!--=====================================
                     =            PRODUCT INPUT           =
                     ======================================-->
-
-                <div class="form-group row newProduct">
-                  <!-- Name of Product -->
                   
-                  <div class="col-xs-6" style="padding-right: 0px">
-                    <div class="input-group">
-                      <span class="input-group-addon"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></button></span>
+                    
+                    <div class="form-group row newProduct">
+                    
 
-                      <input type="text" class="form-control" id="addProduct" name="addProduct" placeholder="Name of Product" required>
 
+                    </div>
+
+                    <input type="hidden" name="productsList" id="productsList">
+
+                    <!--=====================================
+                    =            ADD PRODUCT BUTTON          =
+                    ======================================-->
+                    
+                    <button type="button" class="btn btn-default hidden-lg btnAddProduct">Add Product</button>
+
+                    <hr>
+
+                    <div class="row">
+
+                      <!--=====================================
+                        TAXES AND TOTAL INPUT
+                      ======================================-->
+
+                      <div class="col-xs-12 pull-right">
+
+                        <table class="table">
+                          
+                          <thead>
+                            <th>Net Price</th>
+                            <th>Discounts</th>
+                            <th>Total</th>
+
+                          </thead>
+
+
+                          <tbody>
+                            
+                            <tr>
+                               <td style="width: auto">
+
+                                <div class="input-group">
+                                  
+                                  <span class="input-group-addon"><i class="ion ion-social-usd"></i></span>
+                                  
+                                  <input type="text" class="form-control" name="newNetPrice" id="newNetPrice" placeholder="00000" newNetPrice="" readonly required>
+
+
+                                  
+
+                                </div>
+
+                              </td>
+                              
+                              <td style="width: auto">
+
+                                <div class="input-group">
+                                  
+                                  <input type="number" class="form-control" name="newDiscountSale" id="newDiscountSale" placeholder="0" min="0" required>
+
+                                  <input type="hidden" name="newDiscountPrice" id="newDiscountPrice" required>
+
+
+                                  
+                                  <span class="input-group-addon"><i class="fa fa-percent"></i></span>
+
+                                </div>
+                              </td>
+
+                              <td style="width: auto">
+
+                                <div class="input-group">
+                                  
+                                  <span class="input-group-addon"><i class="ion ion-social-usd"></i></span>
+                                  
+                                  <input type="text" class="form-control" name="newSaleTotal" id="newSaleTotal" placeholder="00000" totalSale="" readonly required>
+
+                                  <input type="hidden" name="saleTotal" id="saleTotal" required>
+
+                                </div>
+
+                              </td>
+
+                            </tr>
+
+                          </tbody>
+
+                        </table>
+                        
+                      </div>
+
+                      <hr>
                       
                     </div>
-                    
-                  </div>
 
-                  <!-- Qty of Product -->
-
-                  <div class="col-xs-3">
-                    <input type="number" class="form-control" id="newQuantity" name="newQuantity" min="1" placeholder="0" required>
-                  </div>
-
-                  <!-- price of Product -->
-
-                  <div class="col-xs-3" style="padding-left: 0px">
-                    <div class="input-group">
-                      <input type="number" min="1" class="form-control" id="newProductPrice" name="newProductPrice" placeholder="00000"  required>
-
-                      <span class="input-group-addon"><i class="ion ion-social-usd"></i></span>
-                      
-                    </div>
-                    
-                  </div>
-                  
-                </div>
-                <!-- button add product -->
-
-                <button type="button" class="btn btn-default hidden-lg">Add Product</button>
-                <hr>
-                <div class="row">
-
-                  <div class="col-xs-12 pull-right">
-                    <table class="table">
-                      <thead>
-                        <tr>
-                          <th>Net Total</th>
-                          <th>Discount</th>
-                          <th>Total</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                        <td style="width: auto;">
-                          
-                          <div class="input-group">
-
-                            <input type="number" class="form-control" min="0" id="newNetTotal" name="newNetTotal" placeholder="0" readonly required>
-                            <span class="input-group-addon"><i class="ion ion-social-usd"></i></span>
-                            
-                          </div>
-                        </td>
-
-                        <td style="width: auto;">
-                          
-                          <div class="input-group">
-
-                            <input type="number" class="form-control" min="0" id="newDiscount" name="newDiscount" placeholder="0">
-                            <span class="input-group-addon"><i class="fa fa-percent"></i></span>
-                            
-                          </div>
-                        </td>
-
-                        <td style="width: auto">
-                          
-                          <div class="input-group">
-
-                            <input type="number" class="form-control" min="0" id="newTotal" name="newTotal" placeholder="0" required readonly>
-                            <span class="input-group-addon"><i class="ion ion-social-usd"></i></span>
-                            
-                          </div>
-                        </td>
-                        </tr>
+                    <hr>
 
 
-                      </tbody>
-                      
-                    </table>
-                    
-                  </div>
-                  
-                </div>
-
-                <!--=====================================
+                    <!--=====================================
                       PAYMENT METHOD
                       ======================================-->
 
                     <div class="form-group row">
                       
-                      <div class="col-xs-6" style="padding-right: auto;">
+                      <div class="col-xs-12 pull-right">
 
                         <div class="input-group">
-                      
-                          <select class="form-control" name="newPaymentMethod" id="newPaymentMethod" required>
-                            
-                          
-                              <option value="cash">Cash</option>
-                            
 
-                          </select>
+                          <div class="col-xs-4" >
+
+                            <div class="input-group">
+
+                              <span class="input-group-addon"><i class="ion ion-social-usd"></i></span> 
+
+                              <input type="number" class="form-control" id="newCashValue" name="newCashValue" placeholder="000000" required>
+
+                            <strong>Cash</strong></div>
+
+                           </div>
+
+                           <div class="col-xs-4" id="getCashChange" style="padding-left:0px">
+
+                            <div class="input-group">
+
+                              <span class="input-group-addon"><i class="ion ion-social-usd"></i></span>
+
+                              <input type="number" class="form-control" id="newCashChange" name="newCashChange" placeholder="000000" readonly required>
+
+                            <strong>Due</strong></div>
+
+                           </div>
+                      
+         
 
                         </div>
 
                       </div>
-
+<!-- 
                       <div class="paymentMethodBoxes"></div>
 
-                      <input type="hidden" name="listPaymentMethod" id="listPaymentMethod" required>
+                      <input type="hidden" name="listPaymentMethod" id="listPaymentMethod" required> -->
 
                     </div>
-                   
 
-                
-              </div>
-              <div>
-                
-              </div>
+                    <br>
+                    
+                </div>
 
-            
-            
-          </div>
-          <div class="box-footer">
-            <button type="submit" class="btn btn-primary pull-right">Save sale</button>
-          </div>
-        </form>
+            </div>
+
+            <div class="box-footer">
+              <button type="submit" class="btn btn-primary pull-right">Save sale</button>
+            </div>
+          </form>
+          <?php
+          $createsale = new ControllerSales();
+          $createsale -> ctrCreateSale(); 
+           ?>
+          
+
         </div>
-        
+
       </div>
+
+
       <!--=============================================
       =            PRODUCTS TABLE                   =
       =============================================-->
+
+
       <div class="col-lg-7 hidden-md hidden-sm hidden-xs">
-        <div class="box box-warning">
-          <div class="box-header with-border"></div>
-          <div class="box-body">
-            <table class="table table-bordered table-striped dt-responsive tables">
-              <thead>
-                <tr>
-                  <th style="width: 10px">#</th>
+        
+          <div class="box box-warning">
+            
+            <div class="box-header with-border"></div>
+
+            <div class="box-body">
+              
+              <table class="table table-bordered table-striped dt-responsive salesTable">
+                  
+                <thead>
+
+                   <tr>
+                     
+                     <th style="width: 10px">#</th>
                   <th>Code</th>
                   <th>Name</th>
                   <th>Category</th>
@@ -232,46 +330,33 @@
                   <th>Buying Price</th>
                   <th>Selling Price</th>
                   <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                
-                <tr>
-                  <td>1</td>
-                  <td>101</td>
-                  <td>Seclo</td>
-                  <td>Tablets</td>
-                  <td>100</td>
-                  <td>4</td>
-                  <td>5</td>
-                  <td>
-                    <div class="btn-group">
-                      <button type="button" class="btn btn-primary">ADD</button>
-                      
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-              
-            </table>
-            
+
+                   </tr> 
+
+                </thead>
+
+              </table>
+
+            </div>
+
           </div>
-          
-        </div>
-        
+
+
       </div>
-      
+
     </div>
+
   </section>
 
 </div>
 
+
 <!--=====================================
-=            module add Customers            =
+=            module add Customer            =
 ======================================-->
 
 <!-- Modal -->
-<div id="addCustomer" class="modal fade" role="dialog">
+<div id="modalAddCustomer" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
     <!-- Modal content-->
@@ -279,7 +364,7 @@
       <form role="form" method="POST">
         <div class="modal-header" style="background: #3c8dbc; color: #fff">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Add Customers</h4>
+          <h4 class="modal-title">Add Customer</h4>
         </div>
         <div class="modal-body">
           <div class="box-body">
@@ -287,51 +372,51 @@
             <!--Input name -->
             <div class="form-group">
               <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-th"></i></span>
-                <input class="form-control input-lg" type="text" name="newCustomer" placeholder="Add Customer" required>
+                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                <input class="form-control input-lg" type="text" name="newCustomer" placeholder="Write name" required>
               </div>
             </div>
 
-            <!-- I.D DOCUMENT INPUT -->
-
+            <!--Input id document -->
             <div class="form-group">
               <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-key"></i></span>
-                <input class="form-control input-lg" type="number" min="0" name="newId" placeholder="Write your ID" required>
+                <input class="form-control input-lg" type="number" min="0" name="newIdDocument" placeholder="Write your ID" required>
               </div>
             </div>
 
-            
+            <!--Input email -->
+            <div class="form-group">
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                <input class="form-control input-lg" type="text" name="newEmail" placeholder="Email" required>
+              </div>
+            </div>
 
-            <!-- PHONE INPUT -->
-
+            <!--Input phone -->
             <div class="form-group">
               <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-phone"></i></span>
-                <input class="form-control input-lg" type="number" name="newPhone" placeholder="Contact Number"  required>
+                <input class="form-control input-lg" type="text" name="newPhone" placeholder="phone" data-inputmask="'mask':'(999) 999-9999'" data-mask required>
               </div>
             </div>
 
-            <!-- ADDRESS INPUT -->
-
+            <!--Input address -->
             <div class="form-group">
               <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
-                <input class="form-control input-lg" type="text" name="newAddress" placeholder="Address" >
+                <input class="form-control input-lg" type="text" name="newAddress" placeholder="Address" required>
               </div>
             </div>
 
-            <!-- Due INPUT -->
 
+            <!--Input phone -->
             <div class="form-group">
               <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-key"></i></span>
-                <input class="form-control input-lg" type="text" name="newDue" placeholder="Due" >
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                <input class="form-control input-lg" type="text" name="newBirthdate" placeholder="Birth Date" data-inputmask="'alias': 'yyyy/mm/dd'" data-mask required>
               </div>
             </div>
-
-
-
 
           </div>
         </div>
@@ -340,12 +425,15 @@
           <button type="submit" class="btn btn-primary">Save Customer</button>
         </div>
       </form>
-      <?php
-      $createCustomer = new ControllerCustomers();
-      $createCustomer -> ctrCreateCustomers(); 
 
-       ?>
+      <?php
+
+      ?>
     </div>
 
   </div>
 </div>
+
+
+
+<!--====  End of module add Customer  ====-->

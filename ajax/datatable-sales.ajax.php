@@ -6,6 +6,9 @@ require_once "../models/products.model.php";
 require_once "../controllers/customers.controller.php";
 require_once "../models/customers.model.php";
 
+require_once "../controllers/categories.controller.php";
+require_once "../models/categories.model.php";
+
 
 class productsTableSales{
 
@@ -34,13 +37,17 @@ class productsTableSales{
 
 				for($i=0; $i < count($products); $i++){
 
-
 					/*=============================================
-					We bring the image
+					We bring the category
 					=============================================*/
 					
-					$image = "<img src='".$products[$i]["image"]."' width='40px'>";
+					$item = "id";
+				  	$value = $products[$i]["id_category"];
 
+				  	$categories = ControllerCategories::ctrShowCategories($item, $value);
+
+
+					
 					/*=============================================
 					Stock
 					=============================================*/
@@ -69,10 +76,12 @@ class productsTableSales{
 
 					$jsonData .='[
 						"'.($i+1).'",
-						"'.$image.'",
 						"'.$products[$i]["code"].'",
-						"'.$products[$i]["description"].'",
+						"'.$products[$i]["name"].'",
+						"'.$categories["category"].'",
 						"'.$stock.'",
+						"'.$products[$i]["buying_price"].'",
+						"'.$products[$i]["selling_price"].'",
 						"'.$buttons.'"
 					],';
 				}

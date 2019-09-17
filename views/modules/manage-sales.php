@@ -46,9 +46,10 @@
              <th>Bill code</th>
              <th>Customer</th>
              <th>Seller</th>
-             <th>Payment method</th>
              <th>Net cost</th>
+             <th>Discount</th>
              <th>Total cost</th>
+             <th>Paid</th>
              <th>Due</th>
              <th>Date</th>
              <th>Actions</th>
@@ -83,15 +84,18 @@
                   $itemUser = "id";
                   $valueUser = $value["idSeller"];
 
-                  $userAnswer = ControllerUsers::ctrShowUsers($itemUser, $valueUser);
+                  $userAnswer = UserController::ctrShowUsers($itemUser, $valueUser);
 
                   echo '<td>'.$userAnswer["name"].'</td>
 
-                  <td>'.$value["paymentMethod"].'</td>
+                  
 
-                  <td>$ '.number_format($value["netPrice"],2).'</td>
+                  <td> '.number_format($value["netPrice"],2). ' Tk</td>
+                  <td> '.number_format($value["discount"],2). ' Tk</td>
 
-                  <td>$ '.number_format($value["totalPrice"],2).'</td>
+                  <td> '.number_format($value["totalPrice"],2). ' Tk</td>
+                  <td> '.number_format($value["totalPaid"],2). ' Tk</td>
+                  <td>'.$value["due"]. ' Tk</td>
 
                   <td>'.$value["saledate"].'</td>
 
@@ -101,9 +105,10 @@
                         
                       <div class="btn-group">
                         
-                      <button class="btn btn-info"><i class="fa fa-print"></i></button>
+                      <button class="btn btn-info btnPrintBill" saleCode="'.$value["code"].'" >
+                      <i class="fa fa-print"></i></button>
 
-                        <button class="btn btn-warning btnEditSale" idSale="'.$value["id"].'"><i class="fa fa-pencil"></i></button>
+                        <a href="index.php?route=edit-sale&idSale='.$value["id"].'"> <button class="btn btn-warning btnEditSale" idSale="'.$value["id"].'"><i class="fa fa-pencil"></i></button></a>
 
                         <button class="btn btn-danger btnDeleteSale" idSale="'.$value["id"].'"><i class="fa fa-times"></i></button>
                    </div>  
@@ -119,13 +124,13 @@
           </tbody>
 
         </table>
-
-         <?php
+        <?php
 
           $deleteSale = new ControllerSales();
           $deleteSale -> ctrDeleteSale();
 
           ?>
+
 
       </div>
     
@@ -134,3 +139,4 @@
   </section>
 
 </div>
+
